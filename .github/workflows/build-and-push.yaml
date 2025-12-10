@@ -29,8 +29,8 @@ jobs:
           go-version-file: go.mod
           check-latest: true
 
-      # - name: Run tests
-      #   run: go test -v ./...
+      - name: Run tests
+        run: go test -v ./...
 
       - name: Extract metadata for Docker image
         id: meta
