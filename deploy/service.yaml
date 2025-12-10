@@ -1,0 +1,17 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: pvc-shrink-ray
+  namespace: openshift-cnv
+  labels:
+    app: pvc-shrink-ray
+  annotations:
+    service.beta.openshift.io/serving-cert-secret-name: pvc-shrink-ray-certs
+spec:
+  selector:
+    app: pvc-shrink-ray
+  ports:
+    - port: 443
+      targetPort: 8443
+      protocol: TCP
+      name: https

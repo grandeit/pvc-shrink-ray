@@ -1,0 +1,31 @@
+apiVersion: admissionregistration.k8s.io/v1
+kind: MutatingWebhookConfiguration
+metadata:
+  name: pvc-shrink-ray
+  labels:
+    app: pvc-shrink-ray
+  annotations:
+    service.beta.openshift.io/inject-cabundle: "true"
+webhooks:
+  - name: pvc.shrink.ray
+    admissionReviewVersions: ["v1", "v1beta1"]
+    clientConfig:
+      service:
+        name: pvc-shrink-ray
+        namespace: openshift-cnv
+        path: "/mutate"
+    rules:
+      - operations: ["CREATE"]
+        apiGroups: [""]
+        apiVersions: ["v1"]
+        resources: ["persistentvolumeclaims"]
+        scope: "Namespaced"
+    objectSelector:
+      matchExpressions:
+        - key: cdi.kubevirt.io/applyStorageProfile
+          operator: In
+          values: ["true"]
+    reinvocationPolicy: IfNeeded
+    failurePolicy: Ignore
+    sideEffects: None
+    timeoutSeconds: 10
